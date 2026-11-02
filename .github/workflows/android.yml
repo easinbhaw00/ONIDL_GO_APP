@@ -25,15 +25,27 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Setup Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Resolve Flutter dependencies
+        run: |
+          flutter pub get
+
+      - name: Verify Flutter local.properties
+        run: |
+          echo "Checking local.properties..."
+          cat android/local.properties
+
       - name: Generate Gradle Wrapper
         run: |
           cd android
           gradle wrapper --gradle-version 8.13 --distribution-type bin
           chmod +x gradlew
           ./gradlew --version
-
-      - name: Resolve dependencies
-        run: flutter pub get
+          cd ..
 
       - name: Analyze
         run: flutter analyze
