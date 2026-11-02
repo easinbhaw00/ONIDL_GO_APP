@@ -312,10 +312,77 @@ class _MainShellState extends State<MainShell> {
     ])
   ])))));
   String _fileFormat(String path){final ext=path.contains('.')?path.split('.').last.toUpperCase():'FILE';return ext.length>8?'FILE':ext;}
-  Widget _files()=>Column(children:[
-    _header('My Files','Only files saved by ONIDL Go',trailing:IconButton(onPressed:_refreshFiles,icon:const Icon(Icons.refresh))),
-    Expanded(child:saved.isEmpty?_empty(Icons.folder_open,'No files yet','Completed downloads will appear here.'):ListView.builder(itemCount:saved.length,itemBuilder:(c,i){final f=saved[i] as File;return ListTile(leading:const Icon(Icons.insert_drive_file,color:accent),title:Text(f.uri.pathSegments.last,maxLines:1,overflow:TextOverflow.ellipsis),subtitle:Text('${_formatBytes(f.lengthSync())} • ${_fileFormat(f.path)} • Not scanned'),onTap:()=>OpenFilex.open(f.path),trailing:PopupMenuButton<String>(onSelected:(v)async{if(v=='open')OpenFilex.open(f.path);if(v=='delete'){await f.delete();await _refreshFiles();}},itemBuilder:(_)=>const [PopupMenuItem(value:'open',child:Text('Open')),PopupMenuItem(value:'delete',child:Text('Delete'))]))}))
-  ]);
+ Widget _files() => Column(
+    children: [
+      _header(
+        'My Files',
+        'Only files saved by ONIDL Go',
+        trailing: IconButton(
+          onPressed: _refreshFiles,
+          icon: const Icon(Icons.refresh),
+        ),
+      ),
+
+      Expanded(
+        child: saved.isEmpty
+            ? _empty(
+                Icons.folder_open,
+                'No files yet',
+                'Completed downloads will appear here.',
+              )
+            : ListView.builder(
+                itemCount: saved.length,
+                itemBuilder: (context, index) {
+                  final file = saved[index] as File;
+
+                  return ListTile(
+                    leading: const Icon(
+                      Icons.insert_drive_file,
+                      color: accent,
+                    ),
+
+                    title: Text(
+                      file.uri.pathSegments.last,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    subtitle: Text(
+                      '${_formatBytes(file.lengthSync())} • '
+                      '${_fileFormat(file.path)} • Not scanned',
+                    ),
+
+                    onTap: () => OpenFilex.open(file.path),
+
+                    trailing: PopupMenuButton<String>(
+                      onSelected: (value) async {
+                        if (value == 'open') {
+                          await OpenFilex.open(file.path);
+                        }
+
+                        if (value == 'delete') {
+                          await file.delete();
+                          await _refreshFiles();
+                        }
+                      },
+
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(
+                          value: 'open',
+                          child: Text('Open'),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+      ),
+    ],
+  );
   Widget _settings()=>ListView(children:[
     _header('Settings','Make ONIDL Go yours'),
     SwitchListTile(title:const Text('Light theme'),subtitle:const Text('Use a bright appearance'),value:widget.isLight,onChanged:widget.onTheme),
