@@ -1,0 +1,27 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+android {
+    namespace "com.onidl.go"
+    compileSdk flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    kotlinOptions { jvmTarget = "17" }
+    defaultConfig {
+        applicationId "com.onidl.go"
+        minSdk 28
+        targetSdk flutter.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+    }
+}
+dependencies {
+    implementation "org.libtorrent4j:libtorrent4j:2.1.0-39"
+    implementation "org.libtorrent4j:libtorrent4j-android-arm:2.1.0-39"
+    implementation "org.libtorrent4j:libtorrent4j-android-arm64:2.1.0-39"
+    implementation "org.libtorrent4j:libtorrent4j-android-x86:2.1.0-39"
+    implementation "org.libtorrent4j:libtorrent4j-android-x86_64:2.1.0-39"
+}
+flutter { source "../.." }

@@ -1,0 +1,51 @@
+ONIDL Go — Consolidated Project Status
+Revision date: 2026-11-01
+
+IMPLEMENTED IN SOURCE
+- Flutter app UI: Home, Search, Downloads, My Files, Settings
+- English-only in-app copy; Dark default and persistent Light Mode setting
+- HTTP/HTTPS background downloads via background_downloader
+- Transfer progress, speed, pause, resume, cancel, retry and notifications
+- Download task history retention
+- App-private ONIDL Go download directory; nested My Files listing
+- File metadata: name, size, extension and "Not scanned" security status
+- Open/delete files
+- Internet Archive Advanced Search and metadata lookup
+- Wikimedia Commons media search and direct media links
+- Source/license page links
+- libtorrent4j native Android dependency for ARM, ARM64, x86, x86_64
+- Magnet and .torrent import
+- TorrentEngine process-wide native engine
+- TorrentForegroundService owns engine initialization and active foreground notification lifecycle
+- START_STICKY best-effort service recreation
+- Torrent status event stream: progress, download/upload speed, peers, seeds, size and state
+- Per-torrent and global pause/resume controls
+- Persistent magnet/.torrent queue with original save path
+- BOOT_COMPLETED receiver posts a user reminder notification when torrent queue exists
+- App launch restores saved queue through the foreground service
+- Theme preference saved locally
+- Feedback form with Name and Description; entries saved/viewed locally
+- No ads, paid APIs, paid SDKs or API keys
+
+NOT IMPLEMENTED / EXTERNAL DEPENDENCY
+- Full libtorrent fast-resume save/restore (queue re-add may recheck downloaded pieces)
+- Public/shared feedback database/backend; requires a hosted service/account and configuration
+- Antivirus/malware scanning
+- True automatic torrent restart immediately at boot; Android 15+ prohibits dataSync FGS launch from BOOT_COMPLETED. App posts a notification and waits for user tap.
+- Compile, APK build, emulator and physical-device validation; Flutter/Android SDK are unavailable in this environment
+- Gradle wrapper executable/JAR; only wrapper properties are present
+
+PLATFORM NOTES
+- minSdk 28 due libtorrent4j 2.1.0-39 requirement.
+- dataSync FGS must stop on Android 15+ after its OS time limit. The service implements onTimeout and preserves the queue for later user-initiated restoration.
+- Force Stop, battery restrictions, OEM power management and connectivity can interrupt background transfers.
+
+NO CLAIM OF RELEASE READINESS
+This is a consolidated development source package. It is not a verified release build or tested APK. A real Flutter/Gradle build and device test are mandatory before distribution.
+
+
+Cloud validation handoff
+- Codemagic and GitHub Actions workflows included.
+- CI runs pub get, flutter analyze, flutter test and debug APK build.
+- First successful cloud build is required before claiming compile/test success.
+- Release signing credentials are intentionally not included.
