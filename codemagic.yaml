@@ -1,22 +1,19 @@
 workflows:
   onidl-go-android:
-    name: ONIDL Go - Android APK validation
+    name: ONIDL Go - Android APK
     max_build_duration: 90
-    instance_type: mac_mini_m2
+    instance_type: linux_x2
+
     environment:
       flutter: stable
       java: 17
-   scripts:
-      - name: Configure Android Flutter SDK
-        script: |
-          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
-          test -d "$FLUTTER_ROOT/packages/flutter_tools/gradle"
+
+    scripts:
+      - name: Resolve Flutter dependencies
+        script: flutter pub get
 
       - name: Prepare Gradle wrapper
         script: bash scripts/prepare_android_wrapper.sh
-
-      - name: Resolve Flutter dependencies
-        script: flutter pub get
 
       - name: Static analysis
         script: flutter analyze
@@ -26,6 +23,6 @@ workflows:
 
       - name: Build debug APK
         script: flutter build apk --debug
+
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-      - build/**/outputs/**/*.txt
