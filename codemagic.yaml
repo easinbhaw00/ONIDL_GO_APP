@@ -6,15 +6,24 @@ workflows:
     environment:
       flutter: stable
       java: 17
-    scripts:
+   scripts:
+      - name: Configure Android Flutter SDK
+        script: |
+          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          test -d "$FLUTTER_ROOT/packages/flutter_tools/gradle"
+
       - name: Prepare Gradle wrapper
         script: bash scripts/prepare_android_wrapper.sh
+
       - name: Resolve Flutter dependencies
         script: flutter pub get
+
       - name: Static analysis
         script: flutter analyze
+
       - name: Unit tests
         script: flutter test
+
       - name: Build debug APK
         script: flutter build apk --debug
     artifacts:
