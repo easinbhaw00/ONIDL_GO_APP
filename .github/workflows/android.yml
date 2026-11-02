@@ -25,14 +25,12 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Verify Gradle Wrapper
+      - name: Generate Gradle Wrapper
         run: |
-          echo "Checking Gradle wrapper..."
-          cat android/gradle/wrapper/gradle-wrapper.properties
           cd android
+          gradle wrapper --gradle-version 8.13 --distribution-type bin
           chmod +x gradlew
           ./gradlew --version
-          cd ..
 
       - name: Resolve dependencies
         run: flutter pub get
