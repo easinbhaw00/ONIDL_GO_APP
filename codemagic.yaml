@@ -2,7 +2,7 @@ workflows:
   onidl-go-android:
     name: ONIDL Go - Android APK validation
     max_build_duration: 90
-    instance_type: linux
+    instance_type: mac_mini_m2
     environment:
       flutter: stable
       java: 17
